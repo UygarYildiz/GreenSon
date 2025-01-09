@@ -394,22 +394,27 @@ def get_recent_comments(request):
 def update_profile(request):
     try:
         user = request.user
-        profile = user.profile
+        # UserProfile'ın var olduğundan emin olalım
+        profile, created = UserProfile.objects.get_or_create(user=user)
 
         # Kullanıcı adı kontrolü
         new_username = request.POST.get('username')
         if new_username and new_username != user.username:
             if User.objects.filter(username=new_username).exists():
-                messages.error(request, 'Bu kullanıcı adı zaten kullanılıyor.')
-                return JsonResponse({'success': False, 'error': 'Bu kullanıcı adı zaten kullanılıyor.'})
+                return JsonResponse({
+                    'success': False, 
+                    'error': 'Bu kullanıcı adı zaten kullanılıyor.'
+                })
             user.username = new_username
 
         # Email kontrolü
         new_email = request.POST.get('email')
         if new_email and new_email != user.email:
             if User.objects.filter(email=new_email).exists():
-                messages.error(request, 'Bu e-posta adresi zaten kullanılıyor.')
-                return JsonResponse({'success': False, 'error': 'Bu e-posta adresi zaten kullanılıyor.'})
+                return JsonResponse({
+                    'success': False, 
+                    'error': 'Bu e-posta adresi zaten kullanılıyor.'
+                })
             user.email = new_email
 
         # Profil bilgilerini güncelle
@@ -423,11 +428,21 @@ def update_profile(request):
         user.save()
         profile.save()
 
-        messages.success(request, 'Profiliniz başarıyla güncellendi.')
-        return JsonResponse({'success': True})
+        return JsonResponse({
+            'success': True,
+            'message': 'Profiliniz başarıyla güncellendi.'
+        })
+        
     except Exception as e:
-        messages.error(request, 'Profil güncellenirken bir hata oluştu.')
-        return JsonResponse({'success': False, 'error': 'Profil güncellenirken bir hata oluştu.'})
+        # Hata detayını loglayalım
+        import traceback
+        print("Profil güncelleme hatası:", str(e))
+        print("Hata detayı:", traceback.format_exc())
+        
+        return JsonResponse({
+            'success': False,
+            'error': f'Profil güncellenirken bir hata oluştu: {str(e)}'
+        })
 
 def profile_view(request, username):
     profile = get_object_or_404(UserProfile, user__username=username)

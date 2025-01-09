@@ -3,6 +3,10 @@
 
 {% block title %}{{ profile.user.username }} - GreenAI Forum{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+{% endblock %}
+
 {% block content %}
 <div class="profile-container">
     <!-- Profil Başlığı -->
@@ -352,7 +356,7 @@
         <!-- Ayarlar Tab -->
         {% if request.user == profile.user %}
         <div class="tab-content" id="settings">
-            <form class="settings-form" method="post" action="{% url 'forum:update_profile' %}" enctype="multipart/form-data">
+            <form class="settings-form" method="post" action="{% url 'forum:profile_update' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="bio">Hakkımda</label>
@@ -378,9 +382,9 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">Profili Düzenle</h3>
-            <button class="close-modal">&times;</button>
+            <button type="button" class="modal-close">&times;</button>
         </div>
-        <form method="POST" action="{% url 'forum:update_profile' %}" enctype="multipart/form-data">
+        <form method="POST" action="{% url 'forum:profile_update' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label class="form-label">Profil Fotoğrafı</label>
@@ -405,8 +409,8 @@
                 <textarea id="bio" name="bio" class="form-input form-textarea">{{ profile.bio }}</textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="modal-btn cancel-btn close-modal">İptal</button>
-                <button type="submit" class="modal-btn save-btn">Kaydet</button>
+                <button type="button" class="modal-btn modal-cancel">İptal</button>
+                <button type="submit" class="modal-btn btn-save">Kaydet</button>
             </div>
         </form>
     </div>
@@ -415,5 +419,6 @@
 {% endblock %}
 
 {% block extra_js %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="{% static 'forum/js/profile.js' %}"></script>
 {% endblock %} 
