@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tabs = document.querySelectorAll('.tab-item');
-    const topicList = document.querySelector('.topic-list');
+    const contentContainer = document.querySelector('.forum-main-content');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function(e) {
@@ -14,23 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // AJAX isteği gönder
             fetch(`/forum/get-posts/${tabType}/`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        // Topic listesini güncelle
-                        topicList.innerHTML = data.html;
-                    } else {
-                        console.error('Error:', data.message);
+                        // İçeriği yumuşak bir geçişle güncelle
+                        contentContainer.style.opacity = '0';
+                        setTimeout(() => {
+                            contentContainer.innerHTML = data.html;
+                            contentContainer.style.opacity = '1';
+                        }, 300);
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                .catch(error => console.error('Error:', error));
         });
     });
 }); 
