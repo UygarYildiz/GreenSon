@@ -156,3 +156,7 @@ genai.configure(api_key="AIzaSyDpMSjJkxXakcFxU0gA_Zl_qdKtgxqqFOo")
 
 # Gemini API Settings
 GEMINI_API_KEY = os.getenv('AIzaSyDpMSjJkxXakcFxU0gA_Zl_qdKtgxqqFOo')
+
+# Session settings
+SESSION_COOKIE_AGE = 1209600  # 2 hafta (saniye cinsinden)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False

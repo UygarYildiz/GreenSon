@@ -20,6 +20,7 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    {% csrf_token %}
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-content">
@@ -50,7 +51,10 @@
                              class="avatar">
                         <div class="dropdown-menu">
                             <a href="{% url 'forum:profile' user.username %}"><i class="fas fa-user"></i> Profilim</a>
-                            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
+                            <a href="{% url 'forum:logout' %}" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Çıkış</span>
+                            </a>
                         </div>
                     </div>
                 {% else %}

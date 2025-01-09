@@ -20,7 +20,7 @@
             <div class="profile-info">
                 <div class="profile-title">
                     <h1>{{ profile.user.username }}</h1>
-                    {% if request.user == profile.user %}
+                    {% if request.user.is_authenticated and request.user == profile.user %}
                     <button class="edit-profile-btn" id="editProfileBtn">
                         <i class="fas fa-edit"></i>
                         Profili Düzenle
